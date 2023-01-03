@@ -1,41 +1,48 @@
-import { Controller, Delete, Get, Param, Patch, Post, Body, Query} from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Body,
+  Query,
+} from '@nestjs/common';
+import { MoviesService } from './movies.service';
+import { Movie } from './entities/movie.entity';
+
+// controller in charge of mapping the url and receiving the request
+
+//In NestJs if you want import something, you should ask for it.
 
 @Controller('movies')
 export class MoviesController {
-    
-    @Get()
-    getAll(){
-        return 'This will give you All Movies'
-    }
+  constructor(private readonly moviesService: MoviesService) {}
 
-    @Get("Search")
-    searchMovie(@Query("year") searchingYear:string){
-        return `We are searching for a movie made after:${searchingYear}`
-    }
+  @Get()
+  getAll(): Movie[] {
+    return this.moviesService.getAll();
+  }
 
-    //if you want something, you have to ask for it 
-    @Get('/:id')
-    getByMovieId(@Param('id') movieId:string){
-        return `This will show you a movie with Movie id ${movieId}`
-    }
+  //if you want something, you have to ask for it
+  @Get('/:id')
+  getByMovieId(@Param('id') movieId: string): Movie {
+    return this.moviesService.getByMovieId(movieId);
+  }
 
-    @Post()
-    createMovie(@Body() movieData){
-        console.log(movieData)
-        return `This will produce a movie called ${movieData}`
-    }
+  @Post()
+  createMovie(@Body() movieData) {
+    this.moviesService.create(movieData);
+    return 'Movie was Successfully Created';
+  }
 
-    @Delete('/:id')
-    deleteMovie(@Param("id") moiveId:string){
-        return `This will delete a movie with Movie id ${moiveId}`
-    }
+  @Delete('/:id')
+  deleteMovie(@Param('id') moiveId: string) {
+    return this.moviesService.deleteOne(moiveId);
+  }
 
-    @Patch('/:id')
-    patchMovie(@Param('id') movieId:string, @Body() updateData){
-        return {
-            "updatedMovie":movieId,
-            ...updateData
-        }
-    }
-
+  @Patch('/:id')
+  patchMovie(@Param('id') movieId: string, @Body() updateData) {
+    return this.moviesService.update(movieId, updateData);
+  }
 }
