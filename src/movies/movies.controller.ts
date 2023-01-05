@@ -6,10 +6,11 @@ import {
   Patch,
   Post,
   Body,
-  Query,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { Movie } from './entities/movie.entity';
+import { CreateMovieDto } from './dto/create-movie.dto';
+import { UpdateMovieDto } from './dto/update-movie.dto';
 
 // controller in charge of mapping the url and receiving the request
 
@@ -26,23 +27,23 @@ export class MoviesController {
 
   //if you want something, you have to ask for it
   @Get('/:id')
-  getByMovieId(@Param('id') movieId: string): Movie {
+  getByMovieId(@Param('id') movieId: number): Movie {
     return this.moviesService.getByMovieId(movieId);
   }
 
   @Post()
-  createMovie(@Body() movieData) {
+  createMovie(@Body() movieData: CreateMovieDto) {
     this.moviesService.create(movieData);
     return 'Movie was Successfully Created';
   }
 
   @Delete('/:id')
-  deleteMovie(@Param('id') moiveId: string) {
+  deleteMovie(@Param('id') moiveId: number) {
     return this.moviesService.deleteOne(moiveId);
   }
 
   @Patch('/:id')
-  patchMovie(@Param('id') movieId: string, @Body() updateData) {
+  patchMovie(@Param('id') movieId: number, @Body() updateData: UpdateMovieDto) {
     return this.moviesService.update(movieId, updateData);
   }
 }
