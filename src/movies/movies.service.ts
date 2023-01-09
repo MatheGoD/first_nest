@@ -14,7 +14,7 @@ export class MoviesService {
   getByMovieId(id: number): Movie {
     const movieDetails = this.movies.find((movie) => movie.id === id);
     if (!movieDetails) {
-      throw new NotFoundException('Moview with this ID NOT FOUND');
+      throw new NotFoundException('Movie with this ID NOT FOUND');
     }
     return movieDetails;
   }
@@ -22,7 +22,6 @@ export class MoviesService {
   deleteOne(id: number): string {
     this.getByMovieId(id);
     this.movies = this.movies.filter((movie) => movie.id !== id);
-    console.log(this.movies);
     return 'Successfully Deleted';
   }
   //dto 를 쓰는 이유 프로그래머로서 코드르 더 간결하게 만들어주고 네스트 js가 들어오는 쿼리에 대한 유효성 검사
